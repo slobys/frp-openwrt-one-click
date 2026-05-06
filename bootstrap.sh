@@ -40,7 +40,7 @@ for file in install-openwrt.sh install-server.sh uninstall-openwrt.sh uninstall-
     if [ -s "$file" ] && [ "$FRP_FORCE_UPDATE" != "1" ]; then
         :
     else
-        [ "$PRINTED" = "1" ] || { log "正在更新脚本..."; PRINTED="1"; }
+        [ "${PRINTED:-}" = "1" ] || { log "正在更新脚本..."; PRINTED="1"; }
         download "${REPO_RAW}/${file}?v=${CACHE_BUST}" "$file"
         chmod +x "$file"
     fi
