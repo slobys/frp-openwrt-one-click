@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.1
+
+- 修复通过 `wget -qO- ... | sh` 启动时菜单无法读取键盘输入的问题
+- `bootstrap.sh` 现在会将 `menu.sh` 的输入重新连接到 `/dev/tty`
+
 ## 1.2.0
 
 - `firewall.sh` 新增查看已放行 FRP 端口功能：`sh firewall.sh list`

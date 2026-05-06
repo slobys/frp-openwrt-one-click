@@ -31,4 +31,12 @@ for file in install.sh uninstall.sh firewall.sh menu.sh; do
 done
 
 log "启动 FRP 管理菜单"
+
+# When bootstrap.sh is launched via `wget -qO- ... | sh`, stdin is the script
+# stream instead of the keyboard. Reconnect the menu to the real terminal so
+# interactive choices like "6" are read by menu.sh, not by the shell afterwards.
+if [ -r /dev/tty ]; then
+    exec sh ./menu.sh < /dev/tty
+fi
+
 exec sh ./menu.sh
