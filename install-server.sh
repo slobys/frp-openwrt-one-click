@@ -129,7 +129,7 @@ download_frp() {
 
     # Auto-detect: if GitHub is slow, use mirror
     if [ -z "${DOWNLOAD_MIRROR:-}" ] && command -v curl >/dev/null 2>&1; then
-        if ! curl -fsSL --connect-timeout 2 --max-time 3 https://raw.githubusercontent.com -o /dev/null 2>/dev/null; then
+        if ! curl -fsSL --connect-timeout 2 --max-time 3 https://github.com -o /dev/null 2>/dev/null; then
             DOWNLOAD_MIRROR="https://ghfast.top/"
         fi
     fi

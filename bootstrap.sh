@@ -6,7 +6,7 @@ set -eu
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.2.3"
+SCRIPT_BUNDLE_VERSION="2.2.4"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 PRINTED=""
