@@ -6,7 +6,7 @@ set -eu
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.2.1"
+SCRIPT_BUNDLE_VERSION="2.2.2"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 
@@ -24,6 +24,8 @@ download() {
         die "缺少下载工具：请先安装 wget 或 curl"
     fi
 }
+
+printf '%s\n' "==> 启动 FRP 管理菜单"
 
 mkdir -p "$WORKDIR"
 cd "$WORKDIR"
@@ -47,8 +49,6 @@ done
 [ "${PRINTED:-0}" = "1" ] && log "更新完成"
 
 printf '%s\n' "$SCRIPT_BUNDLE_VERSION" > "$VERSION_FILE"
-
-log "启动 FRP 管理菜单"
 
 # If launched from a pipe, stdin may not be the keyboard. Reconnect all stdio
 # to the real terminal when available, then launch the interactive menu.
