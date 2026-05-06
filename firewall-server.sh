@@ -70,14 +70,17 @@ add_rule() {
     spec="$1"
     validate_port_spec "$spec" || die "端口格式无效: ${spec}"
 
+    # iptables uses colon for port ranges, not hyphen
+    ipt_spec="$(printf '%s' "$spec" | tr '-' ':')"
+
     if ! chain_exists; then
         iptables -N FRP_ACCEPT
         iptables -I INPUT -j FRP_ACCEPT
     fi
 
     log "放行端口: ${spec} (tcp/udp)"
-    iptables -A FRP_ACCEPT -p tcp --dport "${spec}" -j ACCEPT
-    iptables -A FRP_ACCEPT -p udp --dport "${spec}" -j ACCEPT
+    iptables -A FRP_ACCEPT -p tcp --dport "${ipt_spec}" -j ACCEPT
+    iptables -A FRP_ACCEPT -p udp --dport "${ipt_spec}" -j ACCEPT
     log "已放行: ${spec}"
     save_iptables
 }
@@ -85,6 +88,9 @@ add_rule() {
 delete_rule() {
     spec="$1"
     validate_port_spec "$spec" || die "端口格式无效: ${spec}"
+
+    # iptables -L shows original spec, but we match with colon for ranges
+    ipt_spec="$(printf '%s' "$spec" | tr '-' ':')"
 
     if ! chain_exists; then
         warn "没有 FRP 放行规则"
@@ -94,7 +100,7 @@ delete_rule() {
     log "删除端口规则: ${spec}"
     while :; do
         line="$(iptables -L FRP_ACCEPT -n --line-numbers 2>/dev/null \
-            | awk -v s="$spec" '$0 ~ "dpt:"s {print $1; exit}')"
+            | awk -v s="$ipt_spec" '$0 ~ "dpt:"s {print $1; exit}')"
         [ -n "$line" ] || break
         iptables -D FRP_ACCEPT "$line"
     done
