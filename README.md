@@ -1,4 +1,4 @@
-# 一键安装 Frp
+# 一键安装 Frp内网穿透
 
 用于在 **VPS/云服务器** 和 **OpenWrt/iStoreOS/软路由** 上一键安装和管理 `frps` / `frpc`。
 
