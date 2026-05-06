@@ -34,7 +34,7 @@ set_toml_string() {
 prompt_value() {
     prompt="$1"
     default="$2"
-    printf '%s [%s]: ' "$prompt" "$default"
+    printf '%s: ' "$prompt"
     read -r val || true
     printf '%s\n' "${val:-$default}"
 }
@@ -63,14 +63,9 @@ modify_frps_dashboard() {
     cur_pass="$(get_toml_string 'webServer.password' "$FRPS_CONFIG")"
 
     echo
-    echo "当前 frps 面板信息："
-    echo "  用户名: ${cur_user:-未设置}"
-    echo "  密码: ${cur_pass:-未设置}"
-    echo
-    echo "直接输入新值后回车，留空则保持不变"
-    echo
-    new_user="$(prompt_value '新用户名' "${cur_user:-admin}")"
-    new_pass="$(prompt_value '新密码' "${cur_pass:-}")"
+    echo "===== 修改 frps 面板账号 ====="
+    new_user="$(prompt_value "用户名（当前：${cur_user:-未设置}；留空则不变）" "${cur_user:-admin}")"
+    new_pass="$(prompt_value "密码（当前：${cur_pass:-未设置}；留空则不变）" "${cur_pass:-}")"
 
     set_toml_string 'webServer.user' "$new_user" "$FRPS_CONFIG"
     set_toml_string 'webServer.password' "$new_pass" "$FRPS_CONFIG"
@@ -84,14 +79,9 @@ modify_frpc_dashboard() {
     cur_pass="$(get_toml_string 'webServer.password' "$FRPC_CONFIG")"
 
     echo
-    echo "当前 frpc 面板信息："
-    echo "  用户名: ${cur_user:-未设置}"
-    echo "  密码: ${cur_pass:-未设置}"
-    echo
-    echo "直接输入新值后回车，留空则保持不变"
-    echo
-    new_user="$(prompt_value '新用户名' "${cur_user:-admin}")"
-    new_pass="$(prompt_value '新密码' "${cur_pass:-}")"
+    echo "===== 修改 frpc 面板账号 ====="
+    new_user="$(prompt_value "用户名（当前：${cur_user:-未设置}；留空则不变）" "${cur_user:-admin}")"
+    new_pass="$(prompt_value "密码（当前：${cur_pass:-未设置}；留空则不变）" "${cur_pass:-}")"
 
     set_toml_string 'webServer.user' "$new_user" "$FRPC_CONFIG"
     set_toml_string 'webServer.password' "$new_pass" "$FRPC_CONFIG"
@@ -104,15 +94,12 @@ modify_token() {
     cur_frpc_token=""
     [ -f "$FRPS_CONFIG" ] && cur_frps_token="$(get_toml_string 'auth.token' "$FRPS_CONFIG")"
     [ -f "$FRPC_CONFIG" ] && cur_frpc_token="$(get_toml_string 'auth.token' "$FRPC_CONFIG")"
+    cur_token="${cur_frps_token:-${cur_frpc_token}}"
 
     echo
-    echo "当前 token："
-    [ -n "$cur_frps_token" ] && echo "  frps: ${cur_frps_token}"
-    [ -n "$cur_frpc_token" ] && echo "  frpc: ${cur_frpc_token}"
-    echo
-    echo "直接输入新值后回车，留空则保持不变"
-    echo
-    new_token="$(prompt_value '新 token' "${cur_frps_token:-${cur_frpc_token}}")"
+    echo "===== 修改 frp token ====="
+    [ -n "$cur_frps_token" ] && [ "$cur_frps_token" != "$cur_frpc_token" ] && echo "注意：当前 frps 和 frpc 的 token 不一致"
+    new_token="$(prompt_value "token（当前：${cur_token}；留空则不变）" "$cur_token")"
 
     if [ -f "$FRPS_CONFIG" ]; then
         set_toml_string 'auth.token' "$new_token" "$FRPS_CONFIG"
