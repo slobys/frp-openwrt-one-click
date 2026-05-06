@@ -189,7 +189,9 @@ clear_rules() {
 }
 
 prompt_port_spec() {
-    printf '请输入端口，例如 7500 或 60000-60999 [默认: %s]: ' "$DEFAULT_PORT"
+    # This function is used inside command substitution, so the prompt must go
+    # to stderr; stdout must contain only the user's port value.
+    printf '请输入端口，例如 7500 或 60000-60999 [默认: %s]: ' "$DEFAULT_PORT" >&2
     read -r spec || true
     spec="${spec:-$DEFAULT_PORT}"
     printf '%s\n' "$spec"

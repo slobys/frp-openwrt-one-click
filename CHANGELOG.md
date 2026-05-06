@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.5
+
+- 修复自定义端口输入时提示文字被一起传入校验函数的问题
+- `prompt_port_spec` 现在将提示输出到 stderr，stdout 只返回端口值
+
 ## 1.2.4
 
 - `bootstrap.sh` 下载子脚本时增加缓存刷新参数，避免 OpenWrt 端拿到 GitHub raw 旧缓存
