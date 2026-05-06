@@ -27,7 +27,7 @@ curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master
 frp
 ```
 
-如果需要强制更新菜单脚本：
+如果刚更新过项目，建议强制刷新一次本地菜单脚本：
 
 ```sh
 FRP_FORCE_UPDATE=1 frp

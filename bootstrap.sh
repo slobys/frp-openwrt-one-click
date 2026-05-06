@@ -6,6 +6,8 @@ set -eu
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
+SCRIPT_BUNDLE_VERSION="1.3.5"
+VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 
 log() { printf '%s\n' "==> $*"; }
@@ -26,6 +28,12 @@ download() {
 mkdir -p "$WORKDIR"
 cd "$WORKDIR"
 
+LOCAL_BUNDLE_VERSION=""
+[ -f "$VERSION_FILE" ] && LOCAL_BUNDLE_VERSION="$(cat "$VERSION_FILE" 2>/dev/null || true)"
+if [ "$LOCAL_BUNDLE_VERSION" != "$SCRIPT_BUNDLE_VERSION" ]; then
+    FRP_FORCE_UPDATE="1"
+fi
+
 for file in install.sh uninstall.sh firewall.sh menu.sh; do
     if [ -s "$file" ] && [ "$FRP_FORCE_UPDATE" != "1" ]; then
         log "使用本地 ${file}"
@@ -35,6 +43,8 @@ for file in install.sh uninstall.sh firewall.sh menu.sh; do
         chmod +x "$file"
     fi
 done
+
+printf '%s\n' "$SCRIPT_BUNDLE_VERSION" > "$VERSION_FILE"
 
 log "启动 FRP 管理菜单"
 
