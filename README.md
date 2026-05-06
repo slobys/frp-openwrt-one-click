@@ -10,42 +10,45 @@
 - iStoreOS 同时运行 `frps + frpc`，通过 frpc 面板管理内网服务映射
 - 软路由作为独立 `frpc` 客户端连接远端 frps
 
-## 一键安装
+## 一键菜单
 
-在 OpenWrt / iStoreOS 软路由 SSH 里直接执行：
+推荐在 OpenWrt / iStoreOS 软路由 SSH 里直接执行下面命令，进入菜单后选择安装、重启、查看日志或卸载：
 
 ```sh
-wget -O /tmp/frp-install.sh https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/install.sh && sh /tmp/frp-install.sh
+wget -O /tmp/frp-bootstrap.sh https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && sh /tmp/frp-bootstrap.sh
 ```
 
 如果系统没有 `wget`，也可以用 `curl`：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/install.sh -o /tmp/frp-install.sh && sh /tmp/frp-install.sh
+curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh -o /tmp/frp-bootstrap.sh && sh /tmp/frp-bootstrap.sh
 ```
 
-指定安装模式示例：
+菜单功能：
 
-```sh
-# 只安装 frps 服务端
-wget -O /tmp/frp-install.sh https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/install.sh && sh /tmp/frp-install.sh --frps-only
-
-# 只安装 frpc 客户端
-wget -O /tmp/frp-install.sh https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/install.sh && sh /tmp/frp-install.sh --frpc-only
+```text
+1) 安装 frps + frpc
+2) 只安装 frps 服务端
+3) 只安装 frpc 客户端
+4) 重启 frps
+5) 重启 frpc
+6) 查看 FRP 进程
+7) 查看 FRP 日志
+8) 卸载 FRP
 ```
 
 ## 拉取完整项目
 
-如果你想使用菜单、卸载脚本和完整文档：
+如果你想保留完整项目文件，也可以这样运行菜单：
 
 ```sh
 git clone https://github.com/slobys/frp-openwrt-one-click.git
 cd frp-openwrt-one-click
-chmod +x install.sh uninstall.sh menu.sh
-sh install.sh
+chmod +x bootstrap.sh install.sh uninstall.sh menu.sh
+sh menu.sh
 ```
 
-默认会安装：
+默认菜单安装会安装：
 
 - `frps`：服务端，Dashboard 端口 `7500`
 - `frpc`：客户端，Web 管理端口 `7400`
