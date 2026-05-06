@@ -22,7 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master
 国内服务器加速：
 
 ```sh
-wget -qO /usr/bin/frp https://ghfast.top/https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && chmod +x /usr/bin/frp && frp
+wget -qO /usr/bin/frp https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master/bootstrap.sh && chmod +x /usr/bin/frp && frp
 ```
 
 以后再次打开菜单：
