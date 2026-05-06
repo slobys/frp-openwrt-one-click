@@ -14,7 +14,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/m
 国内服务器：
 
 ```sh
-bash <(curl -Ls https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master/bootstrap.sh) gitee
+bash <(curl -Ls https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master/bootstrap-gitee.sh)
 ```
 
 以后再次打开菜单：

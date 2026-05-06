@@ -3,7 +3,7 @@ set -eu
 
 # Download FRP OpenWrt one-click project scripts once, then launch menu.sh.
 
-REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
+REPO_RAW="${REPO_RAW:-https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master}"
 REPO_GITEE="${REPO_GITEE:-https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master}"
 
 # If first arg is "gitee", use Gitee directly and persist preference
@@ -14,6 +14,10 @@ if [ "${1:-}" = "gitee" ]; then
     touch /usr/lib/frp-openwrt-one-click/.gitee
 fi
 [ -f /usr/lib/frp-openwrt-one-click/.gitee ] && REPO_RAW="$REPO_GITEE"
+# Gitee entry: use Gitee directly and persist preference for later `frp` runs
+mkdir -p /usr/lib/frp-openwrt-one-click
+touch /usr/lib/frp-openwrt-one-click/.gitee 2>/dev/null || true
+
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
 SCRIPT_BUNDLE_VERSION="2.3.8"
