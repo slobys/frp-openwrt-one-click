@@ -33,6 +33,18 @@ frp
 FRP_FORCE_UPDATE=1 frp
 ```
 
+## 卸载
+
+菜单里选择 `9) 卸载 FRP`。
+
+卸载会同时清理 `frps/frpc`、服务、配置、`/usr/bin/frp` 管理命令和本地菜单脚本。
+
+如果只想清理管理脚本残留，不卸载 `frps/frpc`，可单独运行：
+
+```sh
+sh /usr/lib/frp-openwrt-one-click/clean-residue.sh
+```
+
 ## 菜单功能
 
 ```text
@@ -99,18 +111,6 @@ frps 远程映射端口:   60000-60999
 /etc/init.d/frpc start|stop|restart|enable|disable
 ps | grep frp
 logread | grep frp
-```
-
-## 卸载
-
-菜单里选择 `9) 卸载 FRP`。
-
-卸载会同时清理 `frps/frpc`、服务、配置、`/usr/bin/frp` 管理命令和本地菜单脚本。
-
-如果只想清理管理脚本残留，不卸载 `frps/frpc`，可单独运行：
-
-```sh
-sh /usr/lib/frp-openwrt-one-click/clean-residue.sh
 ```
 
 ## 注意
