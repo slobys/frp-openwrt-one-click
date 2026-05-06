@@ -125,33 +125,46 @@ download_frp() {
     local arch="$1"
     local pkg="frp_${FRP_VERSION}_linux_${arch}.tar.gz"
     local base="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/${pkg}"
-    local url=""
-
-    # Auto-detect: if GitHub is slow, use mirror
-    if [ -z "${DOWNLOAD_MIRROR:-}" ] && command -v curl >/dev/null 2>&1; then
-        if ! curl -fsSL --connect-timeout 2 --max-time 3 https://github.com -o /dev/null 2>/dev/null; then
-            DOWNLOAD_MIRROR="https://ghfast.top/"
-        fi
-    fi
-
-    if [ -n "${DOWNLOAD_MIRROR:-}" ]; then
-        url="${DOWNLOAD_MIRROR}${base}"
-        log "使用镜像下载 FRP ${FRP_VERSION} (${arch})"
-    else
-        url="$base"
-        log "下载 FRP ${FRP_VERSION} (${arch})"
-    fi
 
     rm -rf "$TMP_ROOT"
     mkdir -p "$TMP_ROOT"
     cd "$TMP_ROOT"
 
-    if command -v wget >/dev/null 2>&1; then
-        wget -O "$pkg" "$url"
-    elif command -v curl >/dev/null 2>&1; then
-        curl -fL -o "$pkg" "$url"
+    # If user explicitly set a mirror, use it directly
+    if [ -n "${DOWNLOAD_MIRROR:-}" ]; then
+        url="${DOWNLOAD_MIRROR}${base}"
+        log "使用镜像下载 FRP ${FRP_VERSION} (${arch})"
+        if command -v wget >/dev/null 2>&1; then wget -O "$pkg" "$url"; else curl -fL -o "$pkg" "$url"; fi
     else
-        die "缺少下载工具：请先安装 wget 或 curl"
+        log "下载 FRP ${FRP_VERSION} (${arch})，正在测速..."
+        # Start direct download
+        if command -v wget >/dev/null 2>&1; then
+            wget -O "$pkg" "$base" &
+            dl_pid=$!
+        else
+            curl -fL -o "$pkg" "$base" &
+            dl_pid=$!
+        fi
+        # Wait 4 seconds then check speed
+        sleep 4
+        if kill -0 "$dl_pid" 2>/dev/null; then
+            size=0
+            [ -f "$pkg" ] && size=$(wc -c < "$pkg" 2>/dev/null || echo 0)
+            if [ "$size" -lt 512000 ]; then
+                kill "$dl_pid" 2>/dev/null || true
+                wait "$dl_pid" 2>/dev/null || true
+                rm -f "$pkg"
+                url="https://ghfast.top/${base}"
+                log "GitHub 直连较慢，切换到镜像下载"
+                if command -v wget >/dev/null 2>&1; then wget -O "$pkg" "$url"; else curl -fL -o "$pkg" "$url"; fi
+            else
+                log "直连速度正常，继续下载..."
+                wait "$dl_pid" || true
+            fi
+        else
+            # Already finished while we slept
+            wait "$dl_pid" 2>/dev/null || true
+        fi
     fi
 
     log "解压 ${pkg}"
