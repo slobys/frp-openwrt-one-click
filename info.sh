@@ -121,8 +121,10 @@ main() {
     fi
 
     echo
-    echo "配置文件：${FRPS_CONFIG}"
-    is_openwrt && echo "          ${FRPC_CONFIG}"
+    printf '%s' "配置文件："
+    [ -f "$FRPS_CONFIG" ] && printf '%s' " ${FRPS_CONFIG}"
+    [ -f "$FRPC_CONFIG" ] && printf '%s' " ${FRPC_CONFIG}"
+    echo
 }
 
 main "$@"
