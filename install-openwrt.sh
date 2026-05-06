@@ -98,6 +98,9 @@ set_config_var() {
         FRPC_DASHBOARD_PORT) FRPC_DASHBOARD_PORT="$value" ;;
         FRPC_DASHBOARD_USER) FRPC_DASHBOARD_USER="$value" ;;
         FRPC_DASHBOARD_PASSWORD) FRPC_DASHBOARD_PASSWORD="$value" ;;
+        FRPC_SERVER_ADDR) FRPC_SERVER_ADDR="$value" ;;
+        FRPC_SERVER_PORT) FRPC_SERVER_PORT="$value" ;;
+        FRP_TOKEN) FRP_TOKEN="$value" ;;
         *) die "内部错误：未知配置变量 ${var_name}" ;;
     esac
 }
@@ -153,6 +156,14 @@ configure_dashboard() {
         [ -n "$FRPC_DASHBOARD_PASSWORD" ] || FRPC_DASHBOARD_PASSWORD="frpc_$(random_hex 12)"
         echo
         log "配置 frpc Web 管理面板"
+        if [ "$need_frps" != "1" ]; then
+            # frpc-only: also ask where the remote frps is
+            log "配置远端 frps 连接信息"
+            prompt_value FRPC_SERVER_ADDR "远端 frps 服务器地址" "$FRPC_SERVER_ADDR"
+            prompt_port FRPC_SERVER_PORT "远端 frps 端口" "$FRPC_SERVER_PORT"
+            prompt_value FRP_TOKEN "frp token（需与远端一致）" "$FRP_TOKEN"
+            echo
+        fi
         prompt_port FRPC_DASHBOARD_PORT "frpc Web 管理面板端口" "$FRPC_DASHBOARD_PORT"
         prompt_value FRPC_DASHBOARD_USER "frpc Web 管理面板用户名" "$FRPC_DASHBOARD_USER"
         prompt_value FRPC_DASHBOARD_PASSWORD "frpc Web 管理面板密码" "$FRPC_DASHBOARD_PASSWORD"
