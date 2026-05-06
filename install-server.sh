@@ -125,6 +125,14 @@ download_frp() {
     local arch="$1"
     local pkg="frp_${FRP_VERSION}_linux_${arch}.tar.gz"
     local base="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/${pkg}"
+    local url=""
+
+    # Auto-detect: if GitHub is slow, use mirror
+    if [ -z "${DOWNLOAD_MIRROR:-}" ] && command -v curl >/dev/null 2>&1; then
+        if ! curl -fsSL --connect-timeout 2 --max-time 3 https://raw.githubusercontent.com -o /dev/null 2>/dev/null; then
+            DOWNLOAD_MIRROR="https://ghfast.top/"
+        fi
+    fi
 
     if [ -n "${DOWNLOAD_MIRROR:-}" ]; then
         url="${DOWNLOAD_MIRROR}${base}"
