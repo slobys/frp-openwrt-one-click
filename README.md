@@ -1,9 +1,10 @@
-# frp-openwrt-one-click
+# 一键安装 Frp
 
-用于在 **VPS/云服务器** 和 **OpenWrt/iStoreOS/软路由** 上安装和管理 `frps`/`frpc`。
+用于在 **VPS/云服务器** 和 **OpenWrt/iStoreOS/软路由** 上一键安装和管理 `frps` / `frpc`。
 
+- 支持服务器端 `frps` 和客户端 `frpc` 部署
+- 支持软路由 / OpenWrt / iStoreOS 安装和管理
 - 默认 FRP 版本：`0.68.1`
-- 支持两级菜单：一级选择平台，二级管理安装
 
 ## 一键安装
 
