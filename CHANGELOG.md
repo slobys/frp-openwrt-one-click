@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.10
+
+- 删除独立 `clean-residue.sh` 清理脚本，避免清理逻辑分散
+- 所有清理逻辑统一合并到菜单 `9) 卸载 FRP`
+- 卸载时清理 `frps/frpc`、服务、配置、`/usr/bin/frp`、本地菜单脚本和临时残留
+
 ## 1.3.9
 
 - 调整 `clean-residue.sh`：只清理临时残留，不删除 `/usr/bin/frp` 和 `/usr/lib/frp-openwrt-one-click`
