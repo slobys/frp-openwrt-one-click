@@ -86,17 +86,6 @@ frps 远程映射端口:   60000-60999
 - 删除某个已放行端口
 - 删除所有 `Allow-FRP-*` 规则
 
-也可以在完整项目目录里直接运行：
-
-```sh
-sh firewall.sh list
-sh firewall.sh add 7500
-sh firewall.sh add 60000-60999
-sh firewall.sh delete 7500
-sh firewall.sh delete 60000-60999
-sh firewall.sh clear
-```
-
 ## 常用服务命令
 
 ```sh
