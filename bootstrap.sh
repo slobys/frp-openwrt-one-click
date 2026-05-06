@@ -24,7 +24,7 @@ download() {
 mkdir -p "$WORKDIR"
 cd "$WORKDIR"
 
-for file in install.sh uninstall.sh menu.sh; do
+for file in install.sh uninstall.sh firewall.sh menu.sh; do
     log "下载 ${file}"
     download "${REPO_RAW}/${file}" "$file"
     chmod +x "$file"

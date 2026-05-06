@@ -32,9 +32,10 @@ curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master
 3) 只安装 frpc 客户端
 4) 重启 frps
 5) 重启 frpc
-6) 查看 FRP 进程
-7) 查看 FRP 日志
-8) 卸载 FRP
+6) 放行 FRP 防火墙端口
+7) 查看 FRP 进程
+8) 查看 FRP 日志
+9) 卸载 FRP
 ```
 
 ## 拉取完整项目
@@ -44,7 +45,7 @@ curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master
 ```sh
 git clone https://github.com/slobys/frp-openwrt-one-click.git
 cd frp-openwrt-one-click
-chmod +x bootstrap.sh install.sh uninstall.sh menu.sh
+chmod +x bootstrap.sh install.sh uninstall.sh firewall.sh menu.sh
 sh menu.sh
 ```
 
@@ -143,6 +144,39 @@ sh install.sh --frpc-only
 sh install.sh --arch arm64
 ```
 
+## 防火墙端口放行
+
+如果安装后面板或映射端口打不开，可以通过菜单选择 `放行 FRP 防火墙端口`。
+
+也可以直接运行：
+
+```sh
+# 放行单个端口
+sh firewall.sh 7500
+
+# 放行 frpc Web 管理面板
+sh firewall.sh 7400
+
+# 放行 frps 客户端连接端口
+sh firewall.sh 7000
+
+# 放行远程映射端口范围
+sh firewall.sh 60000-60999
+```
+
+脚本会自动创建 OpenWrt 防火墙规则，等效于：
+
+```sh
+uci add firewall rule
+uci set firewall.@rule[-1].name='Allow-FRP-60000-60999'
+uci set firewall.@rule[-1].src='wan'
+uci set firewall.@rule[-1].proto='tcp udp'
+uci set firewall.@rule[-1].dest_port='60000-60999'
+uci set firewall.@rule[-1].target='ACCEPT'
+uci commit firewall
+/etc/init.d/firewall restart
+```
+
 ## 常用管理命令
 
 ```sh
@@ -168,7 +202,7 @@ logread | grep frp          # 查看日志
 sh menu.sh
 ```
 
-菜单支持安装、重启、查看进程、查看日志、卸载。
+菜单支持安装、重启、放行防火墙端口、查看进程、查看日志、卸载。
 
 ## 卸载
 
