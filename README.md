@@ -15,13 +15,13 @@
 推荐在 OpenWrt / iStoreOS 软路由 SSH 里直接执行下面命令，进入菜单后选择安装、重启、查看日志或卸载：
 
 ```sh
-wget -O /tmp/frp-bootstrap.sh https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && sh /tmp/frp-bootstrap.sh
+wget -qO- https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh | sh
 ```
 
 如果系统没有 `wget`，也可以用 `curl`：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh -o /tmp/frp-bootstrap.sh && sh /tmp/frp-bootstrap.sh
+curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh | sh
 ```
 
 菜单功能：
