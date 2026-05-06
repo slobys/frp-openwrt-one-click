@@ -67,6 +67,8 @@ modify_frps_dashboard() {
     echo "  用户名: ${cur_user:-未设置}"
     echo "  密码: ${cur_pass:-未设置}"
     echo
+    echo "直接输入新值后回车，留空则保持不变"
+    echo
     new_user="$(prompt_value '新用户名' "${cur_user:-admin}")"
     new_pass="$(prompt_value '新密码' "${cur_pass:-}")"
 
@@ -85,6 +87,8 @@ modify_frpc_dashboard() {
     echo "当前 frpc 面板信息："
     echo "  用户名: ${cur_user:-未设置}"
     echo "  密码: ${cur_pass:-未设置}"
+    echo
+    echo "直接输入新值后回车，留空则保持不变"
     echo
     new_user="$(prompt_value '新用户名' "${cur_user:-admin}")"
     new_pass="$(prompt_value '新密码' "${cur_pass:-}")"
@@ -105,6 +109,8 @@ modify_token() {
     echo "当前 token："
     [ -n "$cur_frps_token" ] && echo "  frps: ${cur_frps_token}"
     [ -n "$cur_frpc_token" ] && echo "  frpc: ${cur_frpc_token}"
+    echo
+    echo "直接输入新值后回车，留空则保持不变"
     echo
     new_token="$(prompt_value '新 token' "${cur_frps_token:-${cur_frpc_token}}")"
 
