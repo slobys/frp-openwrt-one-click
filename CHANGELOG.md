@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.8
+
+- `clean-residue.sh` 增加提示：清理后 `frp` 快捷菜单将不可用
+- 清理完成后输出重新安装 `frp` 快捷菜单的一键命令
+
 ## 1.3.7
 
 - 新增独立残留清理脚本 `clean-residue.sh`

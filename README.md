@@ -45,6 +45,8 @@ FRP_FORCE_UPDATE=1 frp
 sh /usr/lib/frp-openwrt-one-click/clean-residue.sh
 ```
 
+注意：清理残留后，`frp` 快捷菜单会被删除；需要再次使用时，重新执行上面的一键安装命令即可。
+
 ## 菜单功能
 
 ```text

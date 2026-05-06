@@ -16,6 +16,7 @@ usage() {
 
 说明:
   清理 frp-openwrt-one-click 管理脚本残留，不删除 /etc/frp 配置，也不卸载 frps/frpc 程序。
+  清理后 /usr/bin/frp 会被删除，frp 快捷菜单将不可用；如需再次使用，请重新执行一键安装命令。
 
 会清理:
   /usr/bin/frp
@@ -47,6 +48,8 @@ echo "  $SCRIPT_DIR"
 echo "  $OLD_SCRIPT_DIR"
 echo "  $DOWNLOAD_DIR"
 echo
+echo "注意：清理后 frp 快捷菜单将不可用。"
+echo
 
 echo "不会删除："
 echo "  /usr/bin/frps"
@@ -69,3 +72,6 @@ rm -f "$LAUNCHER"
 rm -rf "$SCRIPT_DIR" "$OLD_SCRIPT_DIR" "$DOWNLOAD_DIR"
 
 echo "FRP 管理脚本残留已清理完成"
+echo
+echo "如需重新安装 frp 快捷菜单，请执行："
+echo "wget -qO /usr/bin/frp https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && chmod +x /usr/bin/frp && frp"
