@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.4
+
+- `bootstrap.sh` 下载子脚本时增加缓存刷新参数，避免 OpenWrt 端拿到 GitHub raw 旧缓存
+
 ## 1.2.3
 
 - 修复删除旧防火墙规则失败的问题：现在删除时会同时匹配规则名和 `dest_port`

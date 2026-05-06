@@ -5,6 +5,7 @@ set -eu
 
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 WORKDIR="${WORKDIR:-/tmp/frp-openwrt-one-click}"
+CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 
 log() { printf '%s\n' "==> $*"; }
 die() { printf '%s\n' "[ERROR] $*" >&2; exit 1; }
@@ -26,7 +27,7 @@ cd "$WORKDIR"
 
 for file in install.sh uninstall.sh firewall.sh menu.sh; do
     log "下载 ${file}"
-    download "${REPO_RAW}/${file}" "$file"
+    download "${REPO_RAW}/${file}?v=${CACHE_BUST}" "$file"
     chmod +x "$file"
 done
 
