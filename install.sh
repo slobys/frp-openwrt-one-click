@@ -4,7 +4,7 @@ set -eu
 # FRP OpenWrt/iStoreOS one-click installer
 # Installs frps and/or frpc with procd init.d services.
 
-SCRIPT_VERSION="1.3.1"
+SCRIPT_VERSION="1.3.2"
 FRP_VERSION="${FRP_VERSION:-0.68.1}"
 INSTALL_MODE="both"
 TMP_ROOT="/tmp/frp-openwrt-download"
@@ -26,6 +26,7 @@ FRPS_DASHBOARD_PASSWORD="${FRPS_DASHBOARD_PASSWORD:-}"
 FRP_TOKEN="${FRP_TOKEN:-}"
 ALLOW_PORT_START="${ALLOW_PORT_START:-60000}"
 ALLOW_PORT_END="${ALLOW_PORT_END:-60999}"
+AUTO_OPEN_FIREWALL="${AUTO_OPEN_FIREWALL:-1}"
 
 FRPC_SERVER_ADDR="${FRPC_SERVER_ADDR:-127.0.0.1}"
 FRPC_SERVER_PORT="${FRPC_SERVER_PORT:-7000}"
@@ -417,6 +418,33 @@ enable_and_restart() {
     "/etc/init.d/${service}" restart
 }
 
+auto_open_remote_ports() {
+    local port_range="${ALLOW_PORT_START}-${ALLOW_PORT_END}"
+    local rule_name="Allow-FRP-${port_range}"
+
+    [ "$AUTO_OPEN_FIREWALL" = "1" ] || return 0
+
+    if ! command -v uci >/dev/null 2>&1 || [ ! -x /etc/init.d/firewall ]; then
+        warn "未检测到 OpenWrt 防火墙环境，跳过自动放行 ${port_range}"
+        return 0
+    fi
+
+    if uci show firewall 2>/dev/null | grep -q "\.dest_port='${port_range}'"; then
+        log "防火墙已存在端口放行规则: ${port_range}"
+        return 0
+    fi
+
+    log "自动放行 frps 远程映射端口: ${port_range} (tcp/udp)"
+    uci add firewall rule >/dev/null
+    uci set firewall.@rule[-1].name="$rule_name"
+    uci set firewall.@rule[-1].src='wan'
+    uci set firewall.@rule[-1].proto='tcp udp'
+    uci set firewall.@rule[-1].dest_port="$port_range"
+    uci set firewall.@rule[-1].target='ACCEPT'
+    uci commit firewall
+    /etc/init.d/firewall restart
+}
+
 print_summary() {
     local lan_ip="$1"
     local wan_ip="$2"
@@ -495,6 +523,7 @@ main() {
         write_frps_config
         write_frps_init
         enable_and_restart frps
+        auto_open_remote_ports
         log "frps 已设置开机自启，并已后台运行"
     fi
 

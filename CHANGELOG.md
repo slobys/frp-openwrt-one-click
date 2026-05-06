@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.2
+
+- 安装 frps 后自动放行远程映射端口范围 `60000-60999`
+- 若已存在相同 `dest_port` 防火墙规则则自动跳过，避免重复添加
+- 可通过 `AUTO_OPEN_FIREWALL=0 sh install.sh` 关闭自动放行
+
 ## 1.3.1
 
 - 修复安装后菜单脚本丢失的问题：FRP 下载解压目录从 `/tmp/frp-openwrt-one-click` 改为 `/tmp/frp-openwrt-download`，避免安装时删除菜单目录
