@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.1
+
+- 修复安装后菜单脚本丢失的问题：FRP 下载解压目录从 `/tmp/frp-openwrt-one-click` 改为 `/tmp/frp-openwrt-download`，避免安装时删除菜单目录
+- 调整安装总结输出逻辑，避免 `set -e` 下条件输出导致总结提前中断
+
 ## 1.3.0
 
 - 安装 frps/frpc 时支持交互式自定义 Web 面板端口、用户名和密码

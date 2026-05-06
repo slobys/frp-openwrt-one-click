@@ -4,10 +4,10 @@ set -eu
 # FRP OpenWrt/iStoreOS one-click installer
 # Installs frps and/or frpc with procd init.d services.
 
-SCRIPT_VERSION="1.3.0"
+SCRIPT_VERSION="1.3.1"
 FRP_VERSION="${FRP_VERSION:-0.68.1}"
 INSTALL_MODE="both"
-TMP_ROOT="/tmp/frp-openwrt-one-click"
+TMP_ROOT="/tmp/frp-openwrt-download"
 FRP_DIR="/etc/frp"
 FRPS_BIN="/usr/bin/frps"
 FRPC_BIN="/usr/bin/frpc"
@@ -431,8 +431,12 @@ print_summary() {
     echo "================ 可复制访问信息 ================"
     if [ "$INSTALL_MODE" = "both" ] || [ "$INSTALL_MODE" = "frps" ]; then
         echo "frps Dashboard（LAN）: http://${lan_ip}:${FRPS_DASHBOARD_PORT}"
-        [ "$wan_ip" != "未知" ] && echo "frps Dashboard（WAN）: http://${wan_ip}:${FRPS_DASHBOARD_PORT}"
-        [ "$public_ip" != "未知" ] && echo "frps Dashboard（公网出口）: http://${public_ip}:${FRPS_DASHBOARD_PORT}"
+        if [ "$wan_ip" != "未知" ]; then
+            echo "frps Dashboard（WAN）: http://${wan_ip}:${FRPS_DASHBOARD_PORT}"
+        fi
+        if [ "$public_ip" != "未知" ]; then
+            echo "frps Dashboard（公网出口）: http://${public_ip}:${FRPS_DASHBOARD_PORT}"
+        fi
         echo "frps 用户名: ${FRPS_DASHBOARD_USER}"
         echo "frps 密码: ${FRPS_DASHBOARD_PASSWORD}"
         echo "frps 客户端连接端口: ${FRPS_BIND_PORT}"
@@ -443,8 +447,12 @@ print_summary() {
     if [ "$INSTALL_MODE" = "both" ] || [ "$INSTALL_MODE" = "frpc" ]; then
         echo
         echo "frpc Web 面板（LAN）: http://${lan_ip}:${FRPC_DASHBOARD_PORT}"
-        [ "$wan_ip" != "未知" ] && echo "frpc Web 面板（WAN）: http://${wan_ip}:${FRPC_DASHBOARD_PORT}"
-        [ "$public_ip" != "未知" ] && echo "frpc Web 面板（公网出口）: http://${public_ip}:${FRPC_DASHBOARD_PORT}"
+        if [ "$wan_ip" != "未知" ]; then
+            echo "frpc Web 面板（WAN）: http://${wan_ip}:${FRPC_DASHBOARD_PORT}"
+        fi
+        if [ "$public_ip" != "未知" ]; then
+            echo "frpc Web 面板（公网出口）: http://${public_ip}:${FRPC_DASHBOARD_PORT}"
+        fi
         echo "frpc 用户名: ${FRPC_DASHBOARD_USER}"
         echo "frpc 密码: ${FRPC_DASHBOARD_PASSWORD}"
         echo "frpc 连接服务端: ${FRPC_SERVER_ADDR}:${FRPC_SERVER_PORT}"
