@@ -95,42 +95,6 @@ ps | grep frp
 logread | grep frp
 ```
 
-## 完整项目方式
-
-如果你想保留完整项目文件：
-
-```sh
-git clone https://github.com/slobys/frp-openwrt-one-click.git
-cd frp-openwrt-one-click
-chmod +x bootstrap.sh install.sh uninstall.sh firewall.sh menu.sh
-sh menu.sh
-```
-
-## 高级用法
-
-```sh
-# 只安装 frps
-sh install.sh --frps-only
-
-# 只安装 frpc
-sh install.sh --frpc-only
-
-# 指定 FRP 版本
-sh install.sh --version 0.68.1
-
-# CPU 架构识别失败时手动指定
-sh install.sh --arch arm64
-```
-
-环境变量覆盖示例：
-
-```sh
-FRP_TOKEN='your_token' \
-FRPS_DASHBOARD_PORT=7500 \
-FRPC_DASHBOARD_PORT=7400 \
-sh install.sh --both
-```
-
 ## 卸载
 
 菜单里选择 `9) 卸载 FRP`，或运行：
