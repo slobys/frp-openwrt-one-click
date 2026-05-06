@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.2.0
+
+- `firewall.sh` 新增查看已放行 FRP 端口功能：`sh firewall.sh list`
+- `firewall.sh` 新增删除单个端口/端口范围功能：`sh firewall.sh delete 7500`、`sh firewall.sh delete 60000-60999`
+- `firewall.sh` 新增删除所有 FRP 放行规则功能：`sh firewall.sh clear`
+- 菜单中的防火墙入口升级为“管理 FRP 防火墙端口”
+
 ## 1.1.0
 
 - 新增 `firewall.sh` 防火墙放行脚本

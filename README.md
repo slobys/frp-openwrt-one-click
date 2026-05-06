@@ -32,7 +32,7 @@ curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master
 3) 只安装 frpc 客户端
 4) 重启 frps
 5) 重启 frpc
-6) 放行 FRP 防火墙端口
+6) 管理 FRP 防火墙端口
 7) 查看 FRP 进程
 8) 查看 FRP 日志
 9) 卸载 FRP
@@ -144,24 +144,47 @@ sh install.sh --frpc-only
 sh install.sh --arch arm64
 ```
 
-## 防火墙端口放行
+## 防火墙端口管理
 
-如果安装后面板或映射端口打不开，可以通过菜单选择 `放行 FRP 防火墙端口`。
+如果安装后面板或映射端口打不开，可以通过菜单选择 `管理 FRP 防火墙端口`。
+
+支持：
+
+- 放行单个端口，例如 `7500`
+- 放行端口范围，例如 `60000-60999`
+- 查看当前已放行的 FRP 端口
+- 删除某个已放行端口
+- 删除所有 `Allow-FRP-*` 规则
 
 也可以直接运行：
 
 ```sh
+# 进入交互式防火墙管理菜单
+sh firewall.sh
+
+# 查看已放行的 FRP 端口
+sh firewall.sh list
+
 # 放行单个端口
-sh firewall.sh 7500
+sh firewall.sh add 7500
 
 # 放行 frpc Web 管理面板
-sh firewall.sh 7400
+sh firewall.sh add 7400
 
 # 放行 frps 客户端连接端口
-sh firewall.sh 7000
+sh firewall.sh add 7000
 
 # 放行远程映射端口范围
-sh firewall.sh 60000-60999
+sh firewall.sh add 60000-60999
+
+# 删除单个端口放行规则
+sh firewall.sh delete 7500
+
+# 删除端口范围放行规则
+sh firewall.sh delete 60000-60999
+
+# 删除所有 Allow-FRP-* 放行规则
+sh firewall.sh clear
 ```
 
 脚本会自动创建 OpenWrt 防火墙规则，等效于：
@@ -202,7 +225,7 @@ logread | grep frp          # 查看日志
 sh menu.sh
 ```
 
-菜单支持安装、重启、放行防火墙端口、查看进程、查看日志、卸载。
+菜单支持安装、重启、管理防火墙端口、查看进程、查看日志、卸载。
 
 ## 卸载
 

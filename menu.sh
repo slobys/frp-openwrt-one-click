@@ -14,7 +14,7 @@ while true; do
  3) 只安装 frpc 客户端
  4) 重启 frps
  5) 重启 frpc
- 6) 放行 FRP 防火墙端口
+ 6) 管理 FRP 防火墙端口
  7) 查看 FRP 进程
  8) 查看 FRP 日志
  9) 卸载 FRP
