@@ -6,7 +6,7 @@ set -eu
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.2.0"
+SCRIPT_BUNDLE_VERSION="2.2.1"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 
@@ -36,13 +36,15 @@ fi
 
 for file in install-openwrt.sh install-server.sh uninstall-openwrt.sh uninstall-server.sh firewall-openwrt.sh firewall-server.sh info.sh config.sh menu-openwrt.sh menu-server.sh menu.sh; do
     if [ -s "$file" ] && [ "$FRP_FORCE_UPDATE" != "1" ]; then
-        log "使用本地 ${file}"
+        :
     else
-        log "下载 ${file}"
+        [ "$PRINTED" = "1" ] || { log "正在更新脚本..."; PRINTED="1"; }
         download "${REPO_RAW}/${file}?v=${CACHE_BUST}" "$file"
         chmod +x "$file"
     fi
 done
+
+[ "${PRINTED:-0}" = "1" ] && log "更新完成"
 
 printf '%s\n' "$SCRIPT_BUNDLE_VERSION" > "$VERSION_FILE"
 
