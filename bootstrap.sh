@@ -1,10 +1,11 @@
 #!/bin/sh
 set -eu
 
-# Download the FRP OpenWrt one-click project scripts to /tmp and launch menu.sh.
+# Download FRP OpenWrt one-click project scripts once, then launch menu.sh.
 
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
-WORKDIR="${WORKDIR:-/tmp/frp-openwrt-one-click}"
+WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
+FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 
 log() { printf '%s\n' "==> $*"; }
@@ -26,9 +27,13 @@ mkdir -p "$WORKDIR"
 cd "$WORKDIR"
 
 for file in install.sh uninstall.sh firewall.sh menu.sh; do
-    log "下载 ${file}"
-    download "${REPO_RAW}/${file}?v=${CACHE_BUST}" "$file"
-    chmod +x "$file"
+    if [ -s "$file" ] && [ "$FRP_FORCE_UPDATE" != "1" ]; then
+        log "使用本地 ${file}"
+    else
+        log "下载 ${file}"
+        download "${REPO_RAW}/${file}?v=${CACHE_BUST}" "$file"
+        chmod +x "$file"
+    fi
 done
 
 log "启动 FRP 管理菜单"

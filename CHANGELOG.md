@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.3
+
+- `frp` 管理命令改为使用持久化脚本目录 `/usr/lib/frp-openwrt-one-click`
+- 再次执行 `frp` 时默认使用本地脚本，不再每次重复下载
+- 如需强制更新脚本，可执行 `FRP_FORCE_UPDATE=1 frp`
+
 ## 1.3.2
 
 - 安装 frps 后自动放行远程映射端口范围 `60000-60999`
