@@ -19,6 +19,12 @@ wget -qO /usr/bin/frp https://raw.githubusercontent.com/slobys/frp-openwrt-one-c
 curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh -o /usr/bin/frp && chmod +x /usr/bin/frp && frp
 ```
 
+国内服务器加速：
+
+```sh
+wget -qO /usr/bin/frp https://ghfast.top/https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && chmod +x /usr/bin/frp && frp
+```
+
 以后再次打开菜单：
 
 ```sh
