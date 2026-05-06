@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.9
+
+- 调整 `clean-residue.sh`：只清理临时残留，不删除 `/usr/bin/frp` 和 `/usr/lib/frp-openwrt-one-click`
+- 彻底删除快捷菜单和脚本目录的逻辑保留在菜单 `9) 卸载 FRP`
+
 ## 1.3.8
 
 - `clean-residue.sh` 增加提示：清理后 `frp` 快捷菜单将不可用

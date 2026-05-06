@@ -1,13 +1,13 @@
 #!/bin/sh
 set -eu
 
-# Clean FRP one-click launcher/script residue only.
-# This is intentionally NOT wired into menu.sh to avoid accidental cleanup.
+# Clean temporary FRP one-click residue only.
+# Full uninstall from menu option 9 removes launcher/scripts.
 
-SCRIPT_DIR="/usr/lib/frp-openwrt-one-click"
 OLD_SCRIPT_DIR="/tmp/frp-openwrt-one-click"
 DOWNLOAD_DIR="/tmp/frp-openwrt-download"
 LAUNCHER="/usr/bin/frp"
+SCRIPT_DIR="/usr/lib/frp-openwrt-one-click"
 
 usage() {
     cat <<'EOF_USAGE'
@@ -15,14 +15,21 @@ usage() {
   sh clean-residue.sh [选项]
 
 说明:
-  清理 frp-openwrt-one-click 管理脚本残留，不删除 /etc/frp 配置，也不卸载 frps/frpc 程序。
-  清理后 /usr/bin/frp 会被删除，frp 快捷菜单将不可用；如需再次使用，请重新执行一键安装命令。
+  只清理临时残留，不删除 frp 快捷菜单和本地菜单脚本。
+  如果想彻底卸载并删除 /usr/bin/frp、菜单脚本，请在菜单里选择 9) 卸载 FRP。
 
 会清理:
-  /usr/bin/frp
-  /usr/lib/frp-openwrt-one-click
   /tmp/frp-openwrt-one-click
   /tmp/frp-openwrt-download
+
+不会删除:
+  /usr/bin/frp
+  /usr/lib/frp-openwrt-one-click
+  /usr/bin/frps
+  /usr/bin/frpc
+  /etc/frp
+  /etc/init.d/frps
+  /etc/init.d/frpc
 
 选项:
   -y, --yes   不询问，直接清理
@@ -42,16 +49,14 @@ done
 
 [ "$(id -u)" = "0" ] || { echo "[ERROR] 请使用 root 用户运行" >&2; exit 1; }
 
-echo "将清理以下 FRP 管理脚本残留："
-echo "  $LAUNCHER"
-echo "  $SCRIPT_DIR"
+echo "将清理以下临时残留："
 echo "  $OLD_SCRIPT_DIR"
 echo "  $DOWNLOAD_DIR"
 echo
-echo "注意：清理后 frp 快捷菜单将不可用。"
-echo
 
 echo "不会删除："
+echo "  $LAUNCHER"
+echo "  $SCRIPT_DIR"
 echo "  /usr/bin/frps"
 echo "  /usr/bin/frpc"
 echo "  /etc/frp"
@@ -60,7 +65,7 @@ echo "  /etc/init.d/frpc"
 echo
 
 if [ "$ASSUME_YES" != "1" ]; then
-    printf '确认清理？输入 yes 继续: '
+    printf '确认清理临时残留？输入 yes 继续: '
     read -r confirm || true
     case "$confirm" in
         yes|YES|y|Y) ;;
@@ -68,10 +73,6 @@ if [ "$ASSUME_YES" != "1" ]; then
     esac
 fi
 
-rm -f "$LAUNCHER"
-rm -rf "$SCRIPT_DIR" "$OLD_SCRIPT_DIR" "$DOWNLOAD_DIR"
+rm -rf "$OLD_SCRIPT_DIR" "$DOWNLOAD_DIR"
 
-echo "FRP 管理脚本残留已清理完成"
-echo
-echo "如需重新安装 frp 快捷菜单，请执行："
-echo "wget -qO /usr/bin/frp https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && chmod +x /usr/bin/frp && frp"
+echo "FRP 临时残留已清理完成，frp 快捷菜单仍然可用"

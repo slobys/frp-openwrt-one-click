@@ -39,13 +39,11 @@ FRP_FORCE_UPDATE=1 frp
 
 卸载会同时清理 `frps/frpc`、服务、配置、`/usr/bin/frp` 管理命令和本地菜单脚本。
 
-如果只想清理管理脚本残留，不卸载 `frps/frpc`，可单独运行：
+如果只想清理临时残留，不卸载 `frps/frpc`，也不删除 `frp` 快捷菜单，可单独运行：
 
 ```sh
 sh /usr/lib/frp-openwrt-one-click/clean-residue.sh
 ```
-
-注意：清理残留后，`frp` 快捷菜单会被删除；需要再次使用时，重新执行上面的一键安装命令即可。
 
 ## 菜单功能
 
