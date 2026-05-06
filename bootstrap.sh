@@ -8,7 +8,7 @@ REPO_GITEE="${REPO_GITEE:-https://gitee.com/naiyou88/frp-openwrt-one-click/raw/m
 # If user ran the Gitee command with REPO_RAW set to Gitee, skip GitHub entirely
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.3.4"
+SCRIPT_BUNDLE_VERSION="2.3.5"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 PRINTED=""
@@ -20,7 +20,7 @@ download() {
     url="$1"
     dest="$2"
     if command -v wget >/dev/null 2>&1; then
-        if ! wget -q --timeout=5 --tries=1 -O "$dest" "$url" 2>/dev/null; then
+        if ! wget -q --timeout=2 --tries=1 -O "$dest" "$url" 2>/dev/null; then
             if [ -z "${GITEE_SWITCHED:-}" ]; then
                 GITEE_SWITCHED=1
                 REPO_RAW="$REPO_GITEE"
@@ -30,7 +30,7 @@ download() {
             fi
         fi
     elif command -v curl >/dev/null 2>&1; then
-        if ! curl -fsSL --max-time 8 -o "$dest" "$url" 2>/dev/null; then
+        if ! curl -fsSL --max-time 4 -o "$dest" "$url" 2>/dev/null; then
             if [ -z "${GITEE_SWITCHED:-}" ]; then
                 GITEE_SWITCHED=1
                 REPO_RAW="$REPO_GITEE"
