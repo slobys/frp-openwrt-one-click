@@ -34,7 +34,7 @@ if [ "$LOCAL_BUNDLE_VERSION" != "$SCRIPT_BUNDLE_VERSION" ]; then
     FRP_FORCE_UPDATE="1"
 fi
 
-for file in install.sh uninstall.sh firewall.sh menu.sh; do
+for file in install.sh uninstall.sh firewall.sh menu.sh clean-residue.sh; do
     if [ -s "$file" ] && [ "$FRP_FORCE_UPDATE" != "1" ]; then
         log "使用本地 ${file}"
     else

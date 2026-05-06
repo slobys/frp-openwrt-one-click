@@ -107,16 +107,10 @@ logread | grep frp
 
 卸载会同时清理 `frps/frpc`、服务、配置、`/usr/bin/frp` 管理命令和本地菜单脚本。
 
-如果在完整项目目录里，也可以运行：
+如果只想清理管理脚本残留，不卸载 `frps/frpc`，可单独运行：
 
 ```sh
-sh uninstall.sh
-```
-
-保留配置卸载：
-
-```sh
-sh uninstall.sh --keep-config
+sh /usr/lib/frp-openwrt-one-click/clean-residue.sh
 ```
 
 ## 注意

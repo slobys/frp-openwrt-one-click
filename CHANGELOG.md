@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.7
+
+- 新增独立残留清理脚本 `clean-residue.sh`
+- 用于单独清理 `/usr/bin/frp`、`/usr/lib/frp-openwrt-one-click` 和临时目录
+- 不集成到菜单，避免误触；不删除 `frps/frpc`、服务和 `/etc/frp` 配置
+
 ## 1.3.6
 
 - `bootstrap.sh` 新增脚本缓存版本标记，版本变化时自动刷新本地脚本缓存
