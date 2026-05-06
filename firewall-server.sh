@@ -27,7 +27,15 @@ require_root() {
 
 require_iptables() {
     command -v iptables >/dev/null 2>&1 || die "缺少 iptables"
-    command -v iptables-save >/dev/null 2>&1 || warn "建议安装 iptables-persistent/netfilter-persistent 以持久化规则"
+}
+
+save_iptables() {
+    if command -v netfilter-persistent >/dev/null 2>&1; then
+        netfilter-persistent save >/dev/null 2>&1 || true
+    elif command -v iptables-save >/dev/null 2>&1; then
+        mkdir -p /etc/iptables 2>/dev/null || true
+        iptables-save > /etc/iptables/rules.v4 2>/dev/null || warn "建议安装 iptables-persistent 以持久化规则"
+    fi
 }
 
 validate_port() {
@@ -68,24 +76,10 @@ add_rule() {
     fi
 
     log "放行端口: ${spec} (tcp/udp)"
-    case "$spec" in
-        *-*) iptables -A FRP_ACCEPT -p tcp --dport "${spec}" -j ACCEPT
-             iptables -A FRP_ACCEPT -p udp --dport "${spec}" -j ACCEPT ;;
-        *)   iptables -A FRP_ACCEPT -p tcp --dport "${spec}" -j ACCEPT
-             iptables -A FRP_ACCEPT -p udp --dport "${spec}" -j ACCEPT ;;
-    esac
+    iptables -A FRP_ACCEPT -p tcp --dport "${spec}" -j ACCEPT
+    iptables -A FRP_ACCEPT -p udp --dport "${spec}" -j ACCEPT
     log "已放行: ${spec}"
-
-    if command -v netfilter-persistent >/dev/null 2>&1; then
-        netfilter-persistent save >/dev/null 2>&1 || warn "无法保存持久化规则"
-    elif command -v iptables-save >/dev/null 2>&1; then
-        iptables-save > /etc/iptables/rules.v4 2>/dev/null || true
-    fi
-}
-
-delete_rule_by_line() {
-    line="$1"
-    iptables -D FRP_ACCEPT "$line"
+    save_iptables
 }
 
 delete_rule() {
@@ -98,7 +92,6 @@ delete_rule() {
     fi
 
     log "删除端口规则: ${spec}"
-    # Delete lines matching the port spec (last-match-first to avoid renumbering)
     while :; do
         line="$(iptables -L FRP_ACCEPT -n --line-numbers 2>/dev/null \
             | awk -v s="$spec" '$0 ~ "dpt:"s {print $1; exit}')"
@@ -106,10 +99,7 @@ delete_rule() {
         iptables -D FRP_ACCEPT "$line"
     done
     log "已删除: ${spec}"
-
-    if command -v netfilter-persistent >/dev/null 2>&1; then
-        netfilter-persistent save >/dev/null 2>&1 || true
-    fi
+    save_iptables
 }
 
 clear_rules() {
@@ -121,10 +111,7 @@ clear_rules() {
     iptables -F FRP_ACCEPT 2>/dev/null || true
     iptables -X FRP_ACCEPT 2>/dev/null || true
     log "已删除所有 FRP 放行规则"
-
-    if command -v netfilter-persistent >/dev/null 2>&1; then
-        netfilter-persistent save >/dev/null 2>&1 || true
-    fi
+    save_iptables
 }
 
 prompt_port_spec() {
@@ -160,16 +147,19 @@ EOF_MENU
                 *) die "无效选择" ;;
             esac ;;
         2) list_rules ;;
-        3) list_rules; echo; add_rule 60000-60999 >/dev/null 2>&1 || true
-           add_rule "$(prompt_port_spec)" >/dev/null 2>&1 || true
-           # redo properly - just prompt for port
-           delete_rule "$(prompt_port_spec)" ;;
+        3)
+            printf '请输入要删除的端口，例如 7500 或 60000-60999: '
+            read -r spec || true
+            [ -n "$spec" ] || die "端口不能为空"
+            delete_rule "$spec"
+            ;;
         4)
-            printf '确认删除所有 FRP 规则？输入 yes: '
+            printf '确认删除所有 FRP 规则？输入 yes 继续: '
             read -r confirm || true
-            case "$confirm" in yes|YES|y|Y) clear_rules ;; *) echo "已取消" ;; esac ;;
+            case "$confirm" in yes|YES|y|Y) clear_rules ;; *) echo "已取消" ;; esac
+            ;;
         0) exit 0 ;;
-        *) die "无效选择" ;;
+        *) die "无效选择: $choice" ;;
     esac
 }
 
