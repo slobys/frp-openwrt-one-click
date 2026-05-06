@@ -6,7 +6,7 @@ set -eu
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.3.0"
+SCRIPT_BUNDLE_VERSION="2.3.1"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 PRINTED=""
@@ -18,9 +18,17 @@ download() {
     url="$1"
     dest="$2"
     if command -v wget >/dev/null 2>&1; then
-        wget -q -O "$dest" "$url"
+        if ! wget -q --timeout=5 --tries=1 -O "$dest" "$url" 2>/dev/null; then
+            mirror="$(printf '%s' "$url" | sed 's|https://raw.githubusercontent.com|https://ghfast.top/https://raw.githubusercontent.com|')"
+            log "GitHub 较慢，切换镜像加速"
+            wget -q -O "$dest" "$mirror"
+        fi
     elif command -v curl >/dev/null 2>&1; then
-        curl -fsSL -o "$dest" "$url"
+        if ! curl -fsSL --max-time 8 -o "$dest" "$url" 2>/dev/null; then
+            mirror="$(printf '%s' "$url" | sed 's|https://raw.githubusercontent.com|https://ghfast.top/https://raw.githubusercontent.com|')"
+            log "GitHub 较慢，切换镜像加速"
+            curl -fsSL -o "$dest" "$mirror"
+        fi
     else
         die "缺少下载工具：请先安装 wget 或 curl"
     fi
