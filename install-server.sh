@@ -74,7 +74,7 @@ prompt_value() {
     local prompt_text="$1"
     local default_value="$2"
     local value=""
-    printf '%s [默认: %s]: ' "$prompt_text" "$default_value"
+    printf '%s [默认: %s]: ' "$prompt_text" "$default_value" >&2
     read -r value || true
     printf '%s\n' "${value:-$default_value}"
 }
@@ -84,7 +84,7 @@ prompt_port() {
     local default_value="$2"
     local value=""
     while :; do
-        printf '%s [默认: %s]: ' "$prompt_text" "$default_value"
+        printf '%s [默认: %s]: ' "$prompt_text" "$default_value" >&2
         read -r value || true
         value="${value:-$default_value}"
         if validate_port "$value"; then
