@@ -71,7 +71,10 @@ add_rule() {
     validate_port_spec "$spec" || die "端口格式无效: ${spec}"
 
     # iptables uses colon for port ranges, not hyphen
-    ipt_spec="$(printf '%s' "$spec" | tr '-' ':')"
+    case "$spec" in
+        *-*) ipt_spec="${spec%-*}:${spec#*-}" ;;
+        *)   ipt_spec="$spec" ;;
+    esac
 
     if ! chain_exists; then
         iptables -N FRP_ACCEPT
@@ -90,7 +93,10 @@ delete_rule() {
     validate_port_spec "$spec" || die "端口格式无效: ${spec}"
 
     # iptables -L shows original spec, but we match with colon for ranges
-    ipt_spec="$(printf '%s' "$spec" | tr '-' ':')"
+    case "$spec" in
+        *-*) ipt_spec="${spec%-*}:${spec#*-}" ;;
+        *)   ipt_spec="$spec" ;;
+    esac
 
     if ! chain_exists; then
         warn "没有 FRP 放行规则"
