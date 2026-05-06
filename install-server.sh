@@ -124,13 +124,20 @@ get_public_ip() {
 download_frp() {
     local arch="$1"
     local pkg="frp_${FRP_VERSION}_linux_${arch}.tar.gz"
-    local url="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/${pkg}"
+    local base="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/${pkg}"
+
+    if [ -n "${DOWNLOAD_MIRROR:-}" ]; then
+        url="${DOWNLOAD_MIRROR}${base}"
+        log "使用镜像下载 FRP ${FRP_VERSION} (${arch})"
+    else
+        url="$base"
+        log "下载 FRP ${FRP_VERSION} (${arch})"
+    fi
 
     rm -rf "$TMP_ROOT"
     mkdir -p "$TMP_ROOT"
     cd "$TMP_ROOT"
 
-    log "下载 FRP ${FRP_VERSION} (${arch})"
     if command -v wget >/dev/null 2>&1; then
         wget -O "$pkg" "$url"
     elif command -v curl >/dev/null 2>&1; then
@@ -218,6 +225,7 @@ parse_args() {
         case "$1" in
             --version) shift; [ "$#" -gt 0 ] || die "--version 需要版本号"; FRP_VERSION="$1" ;;
             --arch) shift; [ "$#" -gt 0 ] || die "--arch 需要架构名"; manual_arch="$1" ;;
+            --mirror) DOWNLOAD_MIRROR="${DOWNLOAD_MIRROR:-https://ghfast.top/}" ;;
             -h|--help) usage; exit 0 ;;
             *) die "未知参数: $1" ;;
         esac

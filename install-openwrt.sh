@@ -264,13 +264,20 @@ get_public_ip() {
 download_frp() {
     local arch="$1"
     local pkg="frp_${FRP_VERSION}_linux_${arch}.tar.gz"
-    local url="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/${pkg}"
+    local base="https://github.com/fatedier/frp/releases/download/v${FRP_VERSION}/${pkg}"
+
+    if [ -n "${DOWNLOAD_MIRROR:-}" ]; then
+        url="${DOWNLOAD_MIRROR}${base}"
+        log "使用镜像下载 FRP ${FRP_VERSION} (${arch})"
+    else
+        url="$base"
+        log "下载 FRP ${FRP_VERSION} (${arch})"
+    fi
 
     rm -rf "$TMP_ROOT"
     mkdir -p "$TMP_ROOT"
     cd "$TMP_ROOT"
 
-    log "下载 FRP ${FRP_VERSION} (${arch})"
     if command -v wget >/dev/null 2>&1; then
         wget -O "$pkg" "$url"
     elif command -v curl >/dev/null 2>&1; then
@@ -355,6 +362,9 @@ serverPort = ${FRPC_SERVER_PORT}
 
 auth.method = "token"
 auth.token = "${token}"
+
+# 连不上远端也不退出，保持 web 面板可用
+loginFailExit = false
 
 # frpc Web 管理面板: http://${lan_ip}:${FRPC_DASHBOARD_PORT}
 webServer.addr = "${lan_ip}"
