@@ -295,8 +295,26 @@ download_frp() {
                 log "GitHub 直连较慢，切换到镜像下载"
                 if command -v wget >/dev/null 2>&1; then wget -O "$pkg" "$url"; else curl -fL -o "$pkg" "$url"; fi
             else
-                log "直连速度正常，继续下载..."
-                wait "$dl_pid" || true
+                # First check passed, re-check after 4s
+                sleep 4
+                if kill -0 "$dl_pid" 2>/dev/null; then
+                    size2=0
+                    [ -f "$pkg" ] && size2=$(wc -c < "$pkg" 2>/dev/null || echo 0)
+                    progress=$((size2 - size))
+                    if [ "$progress" -lt 512000 ]; then
+                        kill "$dl_pid" 2>/dev/null || true
+                        wait "$dl_pid" 2>/dev/null || true
+                        rm -f "$pkg"
+                        url="https://ghfast.top/${base}"
+                        log "下载速度下降，切换到镜像下载"
+                        if command -v wget >/dev/null 2>&1; then wget -O "$pkg" "$url"; else curl -fL -o "$pkg" "$url"; fi
+                    else
+                        log "直连速度正常，继续下载..."
+                        wait "$dl_pid" || true
+                    fi
+                else
+                    wait "$dl_pid" 2>/dev/null || true
+                fi
             fi
         else
             wait "$dl_pid" 2>/dev/null || true

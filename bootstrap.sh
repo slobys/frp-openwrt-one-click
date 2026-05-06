@@ -16,7 +16,7 @@ fi
 [ -f /usr/lib/frp-openwrt-one-click/.gitee ] && REPO_RAW="$REPO_GITEE"
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.3.6"
+SCRIPT_BUNDLE_VERSION="2.3.7"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 PRINTED=""
