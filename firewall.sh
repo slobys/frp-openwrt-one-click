@@ -80,6 +80,22 @@ frp_rule_sections() {
     uci show firewall 2>/dev/null | sed -n "s/^\(firewall\.@rule\[[0-9][0-9]*\]\)\.name='${RULE_PREFIX}[^']*'$/\1/p"
 }
 
+rule_sections_by_port() {
+    spec="$1"
+    frp_rule_sections | while IFS= read -r section; do
+        [ -n "$section" ] || continue
+        port="$(uci -q get "${section}.dest_port" || true)"
+        [ "$port" = "$spec" ] && printf '%s\n' "$section"
+    done
+}
+
+confirm_yes() {
+    case "$1" in
+        YES|yes|Y|y) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
 rule_exists() {
     name="$1"
     [ -n "$(rule_sections_by_name "$name")" ]
@@ -134,19 +150,21 @@ add_rule() {
 delete_rule() {
     spec="$1"
     name="$(port_rule_name "$spec")"
-    sections="$(rule_sections_by_name "$name")"
 
     validate_port_spec "$spec" || die "端口格式无效: ${spec}。请输入单个端口 7500 或范围 60000-60999"
 
-    if [ -z "$sections" ]; then
-        warn "未找到规则: ${name} (${spec})"
+    if [ -z "$(rule_sections_by_name "$name")" ] && [ -z "$(rule_sections_by_port "$spec")" ]; then
+        warn "未找到端口规则: ${spec}（规则名 ${name} 或 dest_port=${spec}）"
         return 0
     fi
 
-    log "删除防火墙放行规则: ${name} (${spec})"
+    log "删除防火墙放行规则: ${spec}"
     while :; do
-        section="$(rule_sections_by_name "$name" | sed -n '1p')"
+        section="$( { rule_sections_by_name "$name"; rule_sections_by_port "$spec"; } | sed -n '1p')"
         [ -n "$section" ] || break
+        rule_name="$(uci -q get "${section}.name" || true)"
+        rule_port="$(uci -q get "${section}.dest_port" || true)"
+        log "删除 ${rule_name} (${rule_port})"
         uci delete "$section"
     done
     restart_firewall
@@ -222,9 +240,9 @@ EOF_MENU
         4) delete_rule 60000-60999 ;;
         5) delete_rule "$(prompt_port_spec)" ;;
         6)
-            printf '确认删除所有 Allow-FRP-* 规则？输入 YES 继续: '
+            printf '确认删除所有 Allow-FRP-* 规则？输入 yes 继续: '
             read -r confirm || true
-            [ "$confirm" = "YES" ] || die "已取消"
+            confirm_yes "$confirm" || die "已取消"
             clear_rules
             ;;
         *) die "无效选择: $choice" ;;
@@ -250,9 +268,9 @@ EOF_MENU
         3) delete_interactive ;;
         4)
             list_rules
-            printf '确认删除所有 Allow-FRP-* 规则？输入 YES 继续: '
+            printf '确认删除所有 Allow-FRP-* 规则？输入 yes 继续: '
             read -r confirm || true
-            [ "$confirm" = "YES" ] || die "已取消"
+            confirm_yes "$confirm" || die "已取消"
             clear_rules
             ;;
         0) exit 0 ;;

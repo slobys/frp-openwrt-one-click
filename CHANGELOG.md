@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.2.3
+
+- 修复删除旧防火墙规则失败的问题：现在删除时会同时匹配规则名和 `dest_port`
+- 兼容手动创建的规则，例如 `Allow-FRP-Remote-Ports` + `dest_port=60000-60999`
+- 删除所有规则的确认支持 `yes/y/YES/Y`
+- `bootstrap.sh` 下载脚本时改为安静模式，减少菜单显示被下载进度干扰
+
 ## 1.2.2
 
 - README 主入口改为安装 `/usr/bin/frp` 管理命令，避免 `wget -qO- ... | sh` 管道模式影响交互菜单输入

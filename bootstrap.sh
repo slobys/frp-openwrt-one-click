@@ -13,9 +13,9 @@ download() {
     url="$1"
     dest="$2"
     if command -v wget >/dev/null 2>&1; then
-        wget -O "$dest" "$url"
+        wget -q -O "$dest" "$url"
     elif command -v curl >/dev/null 2>&1; then
-        curl -fL -o "$dest" "$url"
+        curl -fsSL -o "$dest" "$url"
     else
         die "缺少下载工具：请先安装 wget 或 curl"
     fi

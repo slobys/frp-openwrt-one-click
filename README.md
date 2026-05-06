@@ -187,6 +187,7 @@ sh firewall.sh add 60000-60999
 sh firewall.sh delete 7500
 
 # 删除端口范围放行规则
+# 会同时匹配规则名和 dest_port，因此也能删除手动创建的 Allow-FRP-Remote-Ports
 sh firewall.sh delete 60000-60999
 
 # 删除所有 Allow-FRP-* 放行规则
