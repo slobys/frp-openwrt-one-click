@@ -5,9 +5,10 @@ set -eu
 
 REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master}"
 REPO_GITEE="${REPO_GITEE:-https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master}"
+# If user ran the Gitee command with REPO_RAW set to Gitee, skip GitHub entirely
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.3.2"
+SCRIPT_BUNDLE_VERSION="2.3.3"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 PRINTED=""
