@@ -7,22 +7,14 @@
 
 ## 一键安装
 
-SSH 登录后执行：
-
 ```sh
-wget -qO /usr/bin/frp https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh && chmod +x /usr/bin/frp && frp
+bash <(curl -Ls https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh)
 ```
 
-备用 `curl`：
+国内服务器：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/slobys/frp-openwrt-one-click/master/bootstrap.sh -o /usr/bin/frp && chmod +x /usr/bin/frp && frp
-```
-
-国内服务器加速：
-
-```sh
-wget -qO /usr/bin/frp https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master/bootstrap.sh && chmod +x /usr/bin/frp && REPO_RAW=https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master frp
+bash <(curl -Ls https://gitee.com/naiyou88/frp-openwrt-one-click/raw/master/bootstrap.sh)
 ```
 
 以后再次打开菜单：
