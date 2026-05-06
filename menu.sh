@@ -15,9 +15,10 @@ while true; do
  4) 重启 frps
  5) 重启 frpc
  6) 管理 FRP 防火墙端口
- 7) 查看 FRP 进程
- 8) 查看 FRP 日志
- 9) 卸载 FRP
+ 7) 查看面板信息
+ 8) 查看 FRP 进程
+ 9) 查看 FRP 日志
+ 10) 卸载 FRP
  0) 退出
 ========================================
 EOF_MENU
@@ -30,9 +31,10 @@ EOF_MENU
         4) /etc/init.d/frps restart ;;
         5) /etc/init.d/frpc restart ;;
         6) sh "$DIR/firewall.sh" ;;
-        7) ps | grep '[f]rp' || true ;;
-        8) logread | grep frp || true ;;
-        9) exec sh "$DIR/uninstall.sh" ;;
+        7) sh "$DIR/info.sh" ;;
+        8) ps | grep '[f]rp' || true ;;
+        9) logread | grep frp || true ;;
+        10) exec sh "$DIR/uninstall.sh" ;;
         0) exit 0 ;;
         *) echo "无效选择" ;;
     esac

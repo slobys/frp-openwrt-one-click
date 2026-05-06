@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.4.0
+
+- 新增 `info.sh` 面板信息查询脚本
+- 菜单新增“查看面板信息”功能，可读取并输出 frps/frpc 面板地址、用户名、密码、token 和服务状态
+- `bootstrap.sh` 会下载并缓存 `info.sh`
+
 ## 1.3.10
 
 - 删除独立 `clean-residue.sh` 清理脚本，避免清理逻辑分散

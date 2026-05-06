@@ -48,9 +48,10 @@ FRP_FORCE_UPDATE=1 frp
 4) 重启 frps
 5) 重启 frpc
 6) 管理 FRP 防火墙端口
-7) 查看 FRP 进程
-8) 查看 FRP 日志
-9) 卸载 FRP
+7) 查看面板信息
+8) 查看 FRP 进程
+9) 查看 FRP 日志
+10) 卸载 FRP
 0) 退出
 ```
 
@@ -65,6 +66,7 @@ FRP_FORCE_UPDATE=1 frp
 - 设置开机自启并启动服务
 - 检测 LAN IP、WAN IP、公网出口 IP
 - 输出可直接复制的面板地址、用户名、密码、token
+- 可通过菜单随时查看 frps/frpc 面板信息
 
 安装时可自定义：
 
