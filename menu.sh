@@ -32,7 +32,7 @@ EOF_MENU
         6) sh "$DIR/firewall.sh" ;;
         7) ps | grep '[f]rp' || true ;;
         8) logread | grep frp || true ;;
-        9) sh "$DIR/uninstall.sh" ;;
+        9) exec sh "$DIR/uninstall.sh" ;;
         0) exit 0 ;;
         *) echo "无效选择" ;;
     esac

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.4
+
+- 菜单选择 `9) 卸载 FRP` 后会一并清理 `/usr/bin/frp` 和本地菜单脚本目录 `/usr/lib/frp-openwrt-one-click`
+- 卸载时会清理临时下载目录 `/tmp/frp-openwrt-download` 和旧脚本目录 `/tmp/frp-openwrt-one-click`
+- 新增 `--keep-scripts` 选项用于保留管理命令和菜单脚本
+
 ## 1.3.3
 
 - `frp` 管理命令改为使用持久化脚本目录 `/usr/lib/frp-openwrt-one-click`

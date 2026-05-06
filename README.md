@@ -104,7 +104,11 @@ logread | grep frp
 
 ## 卸载
 
-菜单里选择 `9) 卸载 FRP`，或运行：
+菜单里选择 `9) 卸载 FRP`。
+
+卸载会同时清理 `frps/frpc`、服务、配置、`/usr/bin/frp` 管理命令和本地菜单脚本。
+
+如果在完整项目目录里，也可以运行：
 
 ```sh
 sh uninstall.sh
