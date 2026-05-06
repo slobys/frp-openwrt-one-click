@@ -1,9 +1,14 @@
 # CHANGELOG
 
+## 1.2.2
+
+- README 主入口改为安装 `/usr/bin/frp` 管理命令，避免 `wget -qO- ... | sh` 管道模式影响交互菜单输入
+- 安装后可直接执行 `frp` 打开管理菜单
+
 ## 1.2.1
 
 - 修复通过 `wget -qO- ... | sh` 启动时菜单无法读取键盘输入的问题
-- `bootstrap.sh` 现在会将 `menu.sh` 的输入重新连接到 `/dev/tty`
+- `bootstrap.sh` 现在会将菜单输入输出重新连接到 `/dev/tty`
 
 ## 1.2.0
 

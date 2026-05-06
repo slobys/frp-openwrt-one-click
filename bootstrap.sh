@@ -32,11 +32,10 @@ done
 
 log "启动 FRP 管理菜单"
 
-# When bootstrap.sh is launched via `wget -qO- ... | sh`, stdin is the script
-# stream instead of the keyboard. Reconnect the menu to the real terminal so
-# interactive choices like "6" are read by menu.sh, not by the shell afterwards.
-if [ -r /dev/tty ]; then
-    exec sh ./menu.sh < /dev/tty
+# If launched from a pipe, stdin may not be the keyboard. Reconnect all stdio
+# to the real terminal when available, then launch the interactive menu.
+if [ -r /dev/tty ] && [ -w /dev/tty ]; then
+    exec < /dev/tty > /dev/tty 2>&1
 fi
 
 exec sh ./menu.sh
