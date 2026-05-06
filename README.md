@@ -61,6 +61,8 @@ sh menu.sh
 - `frpc`：客户端，Web 管理端口 `7400`
 - 配置目录：`/etc/frp`
 - 程序路径：`/usr/bin/frps`、`/usr/bin/frpc`
+- 安装时可自定义 frps/frpc Web 面板端口、用户名和密码
+- 用户名和密码默认随机生成，安装完成后会输出可复制的访问地址和账号信息
 
 ## 安装模式
 
@@ -83,23 +85,23 @@ sh install.sh --arch arm64
 
 ## 默认访问地址
 
-### frps Dashboard
+默认端口：
 
 ```text
-http://你的软路由IP:7500
-账号：admin
-密码：naiyou_admin_2026
+frps Dashboard: http://你的软路由IP:7500
+frpc Web 管理面板: http://你的软路由IP:7400
 ```
 
-### frpc Web 管理面板
+> 安装时可以自定义端口、用户名和密码；用户名和密码默认随机生成，实际信息以安装完成后的输出为准。
 
-```text
-http://你的软路由IP:7400
-账号：admin
-密码：naiyou_frpc_2026
-```
+安装完成后脚本会检测并输出：
 
-> 安装后建议立即修改 token 和面板密码。
+- LAN IP
+- WAN IP
+- 公网出口 IP
+- frps / frpc 面板访问地址
+- frps / frpc 用户名和密码
+- frps token、连接端口、允许映射端口范围
 
 ## 自定义 token / 密码 / 端口
 
@@ -107,7 +109,9 @@ http://你的软路由IP:7400
 
 ```sh
 FRP_TOKEN='your_strong_token' \
+FRPS_DASHBOARD_USER='admin' \
 FRPS_DASHBOARD_PASSWORD='your_frps_password' \
+FRPC_DASHBOARD_USER='admin' \
 FRPC_DASHBOARD_PASSWORD='your_frpc_password' \
 sh install.sh --both
 ```
