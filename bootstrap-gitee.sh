@@ -20,7 +20,7 @@ touch /usr/lib/frp-openwrt-one-click/.gitee 2>/dev/null || true
 
 WORKDIR="${WORKDIR:-/usr/lib/frp-openwrt-one-click}"
 FRP_FORCE_UPDATE="${FRP_FORCE_UPDATE:-0}"
-SCRIPT_BUNDLE_VERSION="2.3.8"
+SCRIPT_BUNDLE_VERSION="2.3.9"
 VERSION_FILE=".bundle-version"
 CACHE_BUST="${CACHE_BUST:-$(date +%s 2>/dev/null || echo fresh)}"
 PRINTED=""
@@ -77,7 +77,7 @@ if [ "$LOCAL_BUNDLE_VERSION" != "$SCRIPT_BUNDLE_VERSION" ]; then
     FRP_FORCE_UPDATE="1"
 fi
 
-for file in install-openwrt.sh install-server.sh uninstall-openwrt.sh uninstall-server.sh firewall-openwrt.sh firewall-server.sh info.sh config.sh menu-openwrt.sh menu-server.sh menu.sh; do
+for file in install-openwrt.sh install-server.sh update.sh uninstall-openwrt.sh uninstall-server.sh firewall-openwrt.sh firewall-server.sh info.sh config.sh menu-openwrt.sh menu-server.sh menu.sh; do
     if [ -s "$file" ] && [ "$FRP_FORCE_UPDATE" != "1" ]; then
         :
     else

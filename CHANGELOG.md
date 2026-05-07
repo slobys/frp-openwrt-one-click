@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 2.1.0
+
+- 新增 `update.sh`，支持一键更新 `frps` / `frpc` 二进制文件
+- 服务器菜单新增“一键更新 frps”
+- OpenWrt/iStoreOS 菜单新增“更新 frps + frpc / 只更新 frps / 只更新 frpc”
+- 更新时保留 `/etc/frp/*.toml` 配置，并自动重启对应服务
+
 ## 2.0.0
 
 - 重构菜单为两级结构
