@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.1.1
+
+- GitHub 脚本下载源改为 `github.com/.../raw/master`，避免 `raw.githubusercontent.com` 分支缓存导致菜单拿到旧文件
+- 提升脚本包版本，强制已安装菜单刷新到包含更新功能的新脚本
+
 ## 2.1.0
 
 - 新增 `update.sh`，支持一键更新 `frps` / `frpc` 二进制文件
